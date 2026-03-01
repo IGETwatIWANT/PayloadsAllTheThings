@@ -74,6 +74,9 @@ MITRE_TECHNIQUES: dict[str, MITRETechnique] = {
     "T1565": MITRETechnique("T1565", "Data Manipulation", "Impact", "Manipulate data to affect integrity.", "https://attack.mitre.org/techniques/T1565"),
     "T1021": MITRETechnique("T1021", "Remote Services", "Lateral Movement", "Use remote services for lateral movement.", "https://attack.mitre.org/techniques/T1021"),
     "T1599": MITRETechnique("T1599", "Network Boundary Bridging", "Defense Evasion", "Bridge network boundaries to bypass segmentation.", "https://attack.mitre.org/techniques/T1599"),
+    "T1486": MITRETechnique("T1486", "Data Encrypted for Impact", "Impact", "Encrypt data on target systems to disrupt operations.", "https://attack.mitre.org/techniques/T1486"),
+    "T1490": MITRETechnique("T1490", "Inhibit System Recovery", "Impact", "Delete or disable recovery features.", "https://attack.mitre.org/techniques/T1490"),
+    "T1598": MITRETechnique("T1598", "Phishing for Information", "Reconnaissance", "Send phishing messages to gather information.", "https://attack.mitre.org/techniques/T1598"),
     # Command and Control
     "T1090": MITRETechnique("T1090", "Proxy", "Command and Control", "Adversaries may use proxies to direct network traffic.", "https://attack.mitre.org/techniques/T1090"),
     "T1071": MITRETechnique("T1071", "Application Layer Protocol", "Command and Control", "Communicate using application layer protocols.", "https://attack.mitre.org/techniques/T1071"),
@@ -154,6 +157,15 @@ MODULE_TECHNIQUE_MAP: dict[str, list[str]] = {
     "data_leakage": ["T1213", "T1552"],
     "ai_supply_chain": ["T1584", "T1195"],
     "ai_dos": ["T1499"],
+    # Auth modules (Phase 5)
+    "mfa_bypass": ["T1111", "T1539", "T1550"],
+    "credential_phishing": ["T1566", "T1598", "T1078"],
+    # Network modules (Phase 5)
+    "wifi_security": ["T1557", "T1040", "T1021"],
+    "mitm_assessment": ["T1557", "T1557.001", "T1040"],
+    "protocol_exploit": ["T1190", "T1599"],
+    # Evasion modules (Phase 5)
+    "ransomware_sim": ["T1486", "T1490", "T1027"],
 }
 
 

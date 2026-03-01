@@ -96,6 +96,12 @@ ALL_MODULE_NAMES = [
     # Adversarial ML (Phase 4)
     "prompt_injection", "model_extraction", "model_evasion",
     "data_leakage", "ai_supply_chain", "ai_dos",
+    # Auth (Phase 5)
+    "mfa_bypass", "credential_phishing",
+    # Network (Phase 5)
+    "wifi_security", "mitm_assessment", "protocol_exploit",
+    # Evasion (Phase 5)
+    "ransomware_sim",
 ]
 
 
@@ -475,6 +481,18 @@ def _register_modules(engine, module_names, db, analyzer, model_manager, enable_
     # OSINT module
     from bas.modules.recon.osint import OSINTModule
 
+    # Auth modules (Phase 5)
+    from bas.modules.auth.mfa_bypass import MFABypassModule
+    from bas.modules.auth.credential_phishing import CredentialPhishingModule
+
+    # Network modules (Phase 5)
+    from bas.modules.network.wifi_security import WiFiSecurityModule
+    from bas.modules.network.mitm_assessment import MitmAssessmentModule
+    from bas.modules.network.protocol_exploit import ProtocolExploitModule
+
+    # Evasion modules (Phase 5)
+    from bas.modules.evasion.ransomware_sim import RansomwareSimModule
+
     # Adversarial ML modules
     from bas.modules.adversarial_ml.prompt_injection import PromptInjectionModule
     from bas.modules.adversarial_ml.model_extraction import ModelExtractionModule
@@ -547,6 +565,15 @@ def _register_modules(engine, module_names, db, analyzer, model_manager, enable_
         "data_leakage": DataLeakageModule,
         "ai_supply_chain": AISupplyChainModule,
         "ai_dos": AIDosModule,
+        # Auth (Phase 5)
+        "mfa_bypass": MFABypassModule,
+        "credential_phishing": CredentialPhishingModule,
+        # Network (Phase 5)
+        "wifi_security": WiFiSecurityModule,
+        "mitm_assessment": MitmAssessmentModule,
+        "protocol_exploit": ProtocolExploitModule,
+        # Evasion (Phase 5)
+        "ransomware_sim": RansomwareSimModule,
     }
 
     for name in module_names:
@@ -775,6 +802,10 @@ def list_modules():
         "prompt_injection": "Adversarial ML", "model_extraction": "Adversarial ML",
         "model_evasion": "Adversarial ML", "data_leakage": "Adversarial ML",
         "ai_supply_chain": "Adversarial ML", "ai_dos": "Adversarial ML",
+        "mfa_bypass": "Auth", "credential_phishing": "Auth",
+        "wifi_security": "Network", "mitm_assessment": "Network",
+        "protocol_exploit": "Network",
+        "ransomware_sim": "Evasion",
     }
 
     for i, name in enumerate(ALL_MODULE_NAMES, 1):
