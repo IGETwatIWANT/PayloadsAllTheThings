@@ -91,8 +91,8 @@ ALL_MODULE_NAMES = [
     # Post-Exploitation (Phase 3)
     "data_exfil", "privilege_escalation", "session_attacks",
     "password_policy", "email_injection", "business_logic",
-    # OSINT (Phase 4)
-    "osint",
+    # Recon (Phase 5)
+    "osint", "humint",
     # Adversarial ML (Phase 4)
     "prompt_injection", "model_extraction", "model_evasion",
     "data_leakage", "ai_supply_chain", "ai_dos",
@@ -478,8 +478,9 @@ def _register_modules(engine, module_names, db, analyzer, model_manager, enable_
     from bas.modules.postexploit.email_injection import EmailInjectionModule
     from bas.modules.postexploit.business_logic import BusinessLogicModule
 
-    # OSINT module
+    # Recon modules (Phase 4-5)
     from bas.modules.recon.osint import OSINTModule
+    from bas.modules.recon.humint import HUMINTModule
 
     # Auth modules (Phase 5)
     from bas.modules.auth.mfa_bypass import MFABypassModule
@@ -558,6 +559,7 @@ def _register_modules(engine, module_names, db, analyzer, model_manager, enable_
         "business_logic": BusinessLogicModule,
         # OSINT
         "osint": OSINTModule,
+        "humint": HUMINTModule,
         # Adversarial ML
         "prompt_injection": PromptInjectionModule,
         "model_extraction": ModelExtractionModule,
@@ -798,7 +800,7 @@ def list_modules():
         "data_exfil": "Post-Exploit", "privilege_escalation": "Post-Exploit",
         "session_attacks": "Post-Exploit", "password_policy": "Post-Exploit",
         "email_injection": "Post-Exploit", "business_logic": "Post-Exploit",
-        "osint": "Recon",
+        "osint": "Recon", "humint": "Recon",
         "prompt_injection": "Adversarial ML", "model_extraction": "Adversarial ML",
         "model_evasion": "Adversarial ML", "data_leakage": "Adversarial ML",
         "ai_supply_chain": "Adversarial ML", "ai_dos": "Adversarial ML",

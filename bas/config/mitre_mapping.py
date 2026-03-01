@@ -150,6 +150,7 @@ MODULE_TECHNIQUE_MAP: dict[str, list[str]] = {
     "business_logic": ["T1190"],
     # OSINT module
     "osint": ["T1592", "T1595", "T1589"],
+    "humint": ["T1589", "T1592", "T1598"],
     # Adversarial ML modules
     "prompt_injection": ["T1059", "T1190"],
     "model_extraction": ["T1005", "T1213"],
