@@ -60,6 +60,9 @@ MITRE_TECHNIQUES: dict[str, MITRETechnique] = {
     # Collection
     "T1005": MITRETechnique("T1005", "Data from Local System", "Collection", "Search local file systems for sensitive data.", "https://attack.mitre.org/techniques/T1005"),
     "T1530": MITRETechnique("T1530", "Data from Cloud Storage", "Collection", "Access data from cloud storage.", "https://attack.mitre.org/techniques/T1530"),
+    "T1611": MITRETechnique("T1611", "Escape to Host", "Privilege Escalation", "Escape from container to host.", "https://attack.mitre.org/techniques/T1611"),
+    "T1584": MITRETechnique("T1584", "Compromise Infrastructure", "Resource Development", "Compromise third-party infrastructure.", "https://attack.mitre.org/techniques/T1584"),
+    "T1566": MITRETechnique("T1566", "Phishing", "Initial Access", "Send phishing messages to gain access.", "https://attack.mitre.org/techniques/T1566"),
     "T1213": MITRETechnique("T1213", "Data from Information Repositories", "Collection", "Collect data from information repositories.", "https://attack.mitre.org/techniques/T1213"),
     # Command and Control
     "T1090": MITRETechnique("T1090", "Proxy", "Command and Control", "Adversaries may use proxies to direct network traffic.", "https://attack.mitre.org/techniques/T1090"),
@@ -111,6 +114,27 @@ MODULE_TECHNIQUE_MAP: dict[str, list[str]] = {
     "waf_bypass": ["T1027", "T1190"],
     "amsi_bypass": ["T1562.001"],
     "traffic_shaping": ["T1071", "T1090"],
+    # Advanced modules
+    "dns_rebinding": ["T1071", "T1090"],
+    "race_condition": ["T1068"],
+    "http2_smuggling": ["T1190"],
+    "jwt_advanced": ["T1550", "T1078"],
+    "api_abuse": ["T1190", "T1087"],
+    "ssi_injection": ["T1190", "T1059"],
+    # Infrastructure modules
+    "cloud_metadata": ["T1552.005", "T1530"],
+    "container_escape": ["T1068", "T1210"],
+    "secrets_scanner": ["T1552"],
+    "subdomain_takeover": ["T1595.002"],
+    "api_key_leak": ["T1552"],
+    "misconfig_scanner": ["T1592", "T1595"],
+    # Post-exploitation modules
+    "data_exfil": ["T1048"],
+    "privilege_escalation": ["T1068", "T1548"],
+    "session_attacks": ["T1550"],
+    "password_policy": ["T1110"],
+    "email_injection": ["T1190"],
+    "business_logic": ["T1190"],
 }
 
 

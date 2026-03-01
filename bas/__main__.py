@@ -82,6 +82,15 @@ ALL_MODULE_NAMES = [
     "port_scan", "dir_brute", "subdomain_enum", "credential_test",
     # Evasion (Phase 2)
     "edr_evasion", "waf_bypass", "amsi_bypass", "traffic_shaping",
+    # Advanced (Phase 3)
+    "dns_rebinding", "race_condition", "http2_smuggling",
+    "jwt_advanced", "api_abuse", "ssi_injection",
+    # Infrastructure (Phase 3)
+    "cloud_metadata", "container_escape", "secrets_scanner",
+    "subdomain_takeover", "api_key_leak", "misconfig_scanner",
+    # Post-Exploitation (Phase 3)
+    "data_exfil", "privilege_escalation", "session_attacks",
+    "password_policy", "email_injection", "business_logic",
 ]
 
 
@@ -434,6 +443,30 @@ def _register_modules(engine, module_names, db, analyzer, model_manager, enable_
     from bas.modules.network.subdomain_enum import SubdomainEnumModule
     from bas.modules.network.credential_tester import CredentialTesterModule
 
+    # Advanced modules
+    from bas.modules.advanced.dns_rebinding import DNSRebindingModule
+    from bas.modules.advanced.race_condition import RaceConditionModule
+    from bas.modules.advanced.http2_smuggling import HTTP2SmugglingModule
+    from bas.modules.advanced.jwt_advanced import JWTAdvancedModule
+    from bas.modules.advanced.api_abuse import APIAbuseModule
+    from bas.modules.advanced.ssi_injection import SSIInjectionModule
+
+    # Infrastructure modules
+    from bas.modules.infrastructure.cloud_metadata import CloudMetadataModule
+    from bas.modules.infrastructure.container_escape import ContainerEscapeModule
+    from bas.modules.infrastructure.secrets_scanner import SecretsScanner
+    from bas.modules.infrastructure.subdomain_takeover import SubdomainTakeoverModule
+    from bas.modules.infrastructure.api_key_leak import APIKeyLeakModule
+    from bas.modules.infrastructure.misconfig_scanner import MisconfigScanner
+
+    # Post-exploitation modules
+    from bas.modules.postexploit.data_exfil import DataExfilModule
+    from bas.modules.postexploit.privilege_escalation import PrivilegeEscalationModule
+    from bas.modules.postexploit.session_attacks import SessionAttacksModule
+    from bas.modules.postexploit.password_policy import PasswordPolicyModule
+    from bas.modules.postexploit.email_injection import EmailInjectionModule
+    from bas.modules.postexploit.business_logic import BusinessLogicModule
+
     module_map = {
         # Original
         "discovery": DiscoveryModule,
@@ -468,6 +501,27 @@ def _register_modules(engine, module_names, db, analyzer, model_manager, enable_
         "dir_brute": DirectoryBruteModule,
         "subdomain_enum": SubdomainEnumModule,
         "credential_test": CredentialTesterModule,
+        # Advanced
+        "dns_rebinding": DNSRebindingModule,
+        "race_condition": RaceConditionModule,
+        "http2_smuggling": HTTP2SmugglingModule,
+        "jwt_advanced": JWTAdvancedModule,
+        "api_abuse": APIAbuseModule,
+        "ssi_injection": SSIInjectionModule,
+        # Infrastructure
+        "cloud_metadata": CloudMetadataModule,
+        "container_escape": ContainerEscapeModule,
+        "secrets_scanner": SecretsScanner,
+        "subdomain_takeover": SubdomainTakeoverModule,
+        "api_key_leak": APIKeyLeakModule,
+        "misconfig_scanner": MisconfigScanner,
+        # Post-Exploitation
+        "data_exfil": DataExfilModule,
+        "privilege_escalation": PrivilegeEscalationModule,
+        "session_attacks": SessionAttacksModule,
+        "password_policy": PasswordPolicyModule,
+        "email_injection": EmailInjectionModule,
+        "business_logic": BusinessLogicModule,
     }
 
     for name in module_names:
@@ -674,7 +728,8 @@ def list_modules():
         "subdomain_enum": "Network", "credential_test": "Network",
         "sqli": "Injection", "xss": "Injection", "command_injection": "Injection",
         "ssti": "Injection", "nosqli": "Injection", "ldap": "Injection",
-        "xpath": "Injection", "ssrf": "SSRF", "jwt": "Auth",
+        "xpath": "Injection", "ssi_injection": "Injection",
+        "ssrf": "SSRF", "jwt": "Auth", "jwt_advanced": "Auth",
         "auth_bypass": "Auth", "xxe": "Web", "deserialization": "Web",
         "open_redirect": "Web", "cors": "Web", "crlf": "Web",
         "path_traversal": "Web", "prototype_pollution": "Web",
@@ -683,6 +738,14 @@ def list_modules():
         "graphql": "Web", "websocket": "Web", "hpp": "Web",
         "edr_evasion": "Evasion", "waf_bypass": "Evasion",
         "amsi_bypass": "Evasion", "traffic_shaping": "Evasion",
+        "dns_rebinding": "Advanced", "race_condition": "Advanced",
+        "http2_smuggling": "Advanced", "api_abuse": "Advanced",
+        "cloud_metadata": "Infrastructure", "container_escape": "Infrastructure",
+        "secrets_scanner": "Infrastructure", "subdomain_takeover": "Infrastructure",
+        "api_key_leak": "Infrastructure", "misconfig_scanner": "Infrastructure",
+        "data_exfil": "Post-Exploit", "privilege_escalation": "Post-Exploit",
+        "session_attacks": "Post-Exploit", "password_policy": "Post-Exploit",
+        "email_injection": "Post-Exploit", "business_logic": "Post-Exploit",
     }
 
     for i, name in enumerate(ALL_MODULE_NAMES, 1):
