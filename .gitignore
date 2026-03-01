@@ -1,3 +1,18 @@
 BuildPDF/
 .vscode
 .todo
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+*.egg
+
+# BAS Engine artifacts
+bas_logs/
+bas_data/
+bas_output/
+*.db
