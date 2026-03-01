@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bas-engine"
+version = "0.1.0"
+description = "AI-Driven Breach and Attack Simulation Engine for Cyber Defense"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Information Technology",
+    "Topic :: Security",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+
+dependencies = [
+    "httpx>=0.27.0",
+    "pyyaml>=6.0",
+    "pydantic>=2.5",
+    "rich>=13.0",
+    "typer>=0.9",
+    "aiosqlite>=0.19",
+    "jinja2>=3.1",
+]
+
+[project.optional-dependencies]
+ai = [
+    "ollama>=0.4",
+    "llama-cpp-python>=0.2",
+    "sentence-transformers>=2.2",
+]
+training = [
+    "datasets>=2.14",
+    "peft>=0.7",
+]
+all = ["bas-engine[ai,training]"]
+
+[project.scripts]
+bas = "bas.__main__:app"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["bas*"]
