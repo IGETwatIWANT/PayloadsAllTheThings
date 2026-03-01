@@ -1,19 +1,20 @@
 """
-BAS Engine CLI - Operational Attack Tool
-=========================================
+BASzy Ai CLI - AI-Driven Breach & Attack Simulation Platform
+=============================================================
 
-Point-and-shoot breach and attack simulation.
+State-of-the-art penetration testing powered by local AI.
 
 Usage:
-    bas scan <target> [--modules ...] [--config ...]
-    bas attack <target> --module <module> [--payloads ...]
-    bas recon <target>
-    bas plan <target> [--objectives ...]
-    bas report <engagement_id>
-    bas payloads list [--category ...]
-    bas payloads load
-    bas config init
-    bas models list
+    baszy scan <target> [--modules ...] [--config ...]
+    baszy attack <target> --module <module> [--payloads ...]
+    baszy recon <target>
+    baszy plan <target> [--objectives ...]
+    baszy report <engagement_id>
+    baszy payloads list [--category ...]
+    baszy payloads load
+    baszy gui [--port 8443]
+    baszy config init
+    baszy models list
 """
 
 from __future__ import annotations
@@ -35,8 +36,8 @@ from rich.tree import Tree
 from rich import box
 
 app = typer.Typer(
-    name="bas",
-    help="BAS Engine - AI-Driven Breach and Attack Simulation",
+    name="baszy",
+    help="BASzy Ai - AI-Driven Breach and Attack Simulation Platform",
     no_args_is_help=True,
 )
 console = Console()
@@ -45,20 +46,43 @@ console = Console()
 
 BANNER = """
 [bold red]
- ██████╗  █████╗ ███████╗    ███████╗███╗   ██╗ ██████╗ ██╗███╗   ██╗███████╗
- ██╔══██╗██╔══██╗██╔════╝    ██╔════╝████╗  ██║██╔════╝ ██║████╗  ██║██╔════╝
- ██████╔╝███████║███████╗    █████╗  ██╔██╗ ██║██║  ███╗██║██╔██╗ ██║█████╗
- ██╔══██╗██╔══██║╚════██║    ██╔══╝  ██║╚██╗██║██║   ██║██║██║╚██╗██║██╔══╝
- ██████╔╝██║  ██║███████║    ███████╗██║ ╚████║╚██████╔╝██║██║ ╚████║███████╗
- ╚═════╝ ╚═╝  ╚═╝╚══════╝    ╚══════╝╚═╝  ╚═══╝ ╚═════╝ ╚═╝╚═╝  ╚═══╝╚══════╝
+ ██████╗  █████╗ ███████╗███████╗██╗   ██╗     █████╗ ██╗
+ ██╔══██╗██╔══██╗██╔════╝╚══███╔╝╚██╗ ██╔╝    ██╔══██╗██║
+ ██████╔╝███████║███████╗  ███╔╝  ╚████╔╝     ███████║██║
+ ██╔══██╗██╔══██║╚════██║ ███╔╝    ╚██╔╝      ██╔══██║██║
+ ██████╔╝██║  ██║███████║███████╗   ██║       ██║  ██║██║
+ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚══════╝   ╚═╝       ╚═╝  ╚═╝╚═╝
 [/bold red]
-[dim]AI-Driven Breach & Attack Simulation Engine v0.1.0[/dim]
-[dim]Authorized Red Team Operations Only[/dim]
+[dim]AI-Driven Breach & Attack Simulation Platform v1.0.0[/dim]
+[dim]Proprietary - Authorized Red Team Operations Only[/dim]
 """
 
 
 def show_banner():
     console.print(BANNER)
+
+
+# ─── All Module Names ────────────────────────────────────────────────
+
+ALL_MODULE_NAMES = [
+    # Recon (original)
+    "discovery",
+    # Injection (original)
+    "sqli", "xss", "command_injection", "ssti",
+    # SSRF (original)
+    "ssrf",
+    # Auth (original)
+    "jwt", "auth_bypass",
+    # Web (Phase 2)
+    "xxe", "deserialization", "open_redirect", "cors", "crlf",
+    "path_traversal", "prototype_pollution", "file_upload",
+    "idor", "csrf", "cache_deception", "request_smuggling",
+    "graphql", "websocket", "nosqli", "ldap", "xpath", "hpp",
+    # Network (Phase 2)
+    "port_scan", "dir_brute", "subdomain_enum", "credential_test",
+    # Evasion (Phase 2)
+    "edr_evasion", "waf_bypass", "amsi_bypass", "traffic_shaping",
+]
 
 
 # ─── Scan Command (Full Assessment) ─────────────────────────────────
@@ -75,11 +99,12 @@ def scan(
     proxy: Optional[str] = typer.Option(None, "--proxy", help="Proxy URL (e.g., http://127.0.0.1:8080)"),
     output: str = typer.Option("./bas_output", "--output", "-o", help="Output directory"),
     enable_zeroday: bool = typer.Option(False, "--zeroday", help="Enable AI zero-day simulation"),
+    enable_evasion: bool = typer.Option(False, "--evasion", help="Enable EDR/WAF evasion techniques"),
     ai_model: str = typer.Option("llama3.2", "--ai-model", help="AI model name"),
     ai_host: str = typer.Option("http://localhost:11434", "--ai-host", help="Ollama host"),
     verbose: bool = typer.Option(False, "--verbose", "-v", help="Verbose output"),
 ):
-    """Run a full BAS scan against a target. This is the main attack command."""
+    """Run a full BASzy Ai scan against a target. This is the main attack command."""
     show_banner()
 
     if not authorized_by:
@@ -92,8 +117,9 @@ def scan(
         f"[bold]Auth Level:[/bold] {auth_level}\n"
         f"[bold]Authorized By:[/bold] {authorized_by}\n"
         f"[bold]Dry Run:[/bold] {dry_run}\n"
-        f"[bold]Zero-Day:[/bold] {enable_zeroday}",
-        title="[bold yellow]BAS Engagement Configuration[/bold yellow]",
+        f"[bold]Zero-Day:[/bold] {enable_zeroday}\n"
+        f"[bold]Evasion:[/bold] {enable_evasion}",
+        title="[bold yellow]BASzy Ai Engagement Configuration[/bold yellow]",
         border_style="yellow",
     ))
 
@@ -114,6 +140,7 @@ def scan(
         proxy=proxy,
         output_dir=output,
         enable_zeroday=enable_zeroday,
+        enable_evasion=enable_evasion,
         ai_model=ai_model,
         ai_host=ai_host,
         verbose=verbose,
@@ -131,6 +158,7 @@ async def _run_scan(
     proxy: str | None,
     output_dir: str,
     enable_zeroday: bool,
+    enable_evasion: bool,
     ai_model: str,
     ai_host: str,
     verbose: bool,
@@ -164,7 +192,7 @@ async def _run_scan(
             enable_zeroday=enable_zeroday,
         )
 
-    engagement_id = settings.engagement_id or f"BAS-{uuid.uuid4().hex[:8]}"
+    engagement_id = settings.engagement_id or f"BASZY-{uuid.uuid4().hex[:8]}"
     settings.engagement_id = engagement_id
 
     if modules_str:
@@ -217,9 +245,9 @@ async def _run_scan(
 
     # Register modules
     analyzer = ResultAnalyzer(model_manager) if ai_available else None
-    _register_modules(engine, settings.modules, db, analyzer, model_manager, enable_zeroday)
+    _register_modules(engine, settings.modules, db, analyzer, model_manager, enable_zeroday, enable_evasion)
 
-    console.print(f"\n[bold]Registered Modules:[/bold] {', '.join(engine.list_modules())}")
+    console.print(f"\n[bold]Registered Modules ({len(engine.list_modules())}):[/bold] {', '.join(engine.list_modules())}")
 
     # Plan attack
     console.print("\n[bold cyan]Phase: Attack Planning[/bold cyan]")
@@ -368,8 +396,9 @@ async def _run_scan(
     await db.close()
 
 
-def _register_modules(engine, module_names, db, analyzer, model_manager, enable_zeroday):
+def _register_modules(engine, module_names, db, analyzer, model_manager, enable_zeroday, enable_evasion=False):
     """Register attack modules with the engine."""
+    # Original modules
     from bas.modules.injection.sqli import SQLInjectionModule
     from bas.modules.injection.xss import XSSModule
     from bas.modules.injection.command_injection import CommandInjectionModule
@@ -379,7 +408,34 @@ def _register_modules(engine, module_names, db, analyzer, model_manager, enable_
     from bas.modules.auth.auth_bypass import AuthBypassModule
     from bas.modules.recon.discovery import DiscoveryModule
 
+    # Web modules
+    from bas.modules.web.xxe import XXEModule
+    from bas.modules.web.deserialization import DeserializationModule
+    from bas.modules.web.open_redirect import OpenRedirectModule
+    from bas.modules.web.cors import CORSModule
+    from bas.modules.web.crlf import CRLFModule
+    from bas.modules.web.path_traversal import PathTraversalModule
+    from bas.modules.web.prototype_pollution import PrototypePollutionModule
+    from bas.modules.web.file_upload import FileUploadModule
+    from bas.modules.web.idor import IDORModule
+    from bas.modules.web.csrf import CSRFModule
+    from bas.modules.web.cache_deception import CacheDeceptionModule
+    from bas.modules.web.request_smuggling import RequestSmugglingModule
+    from bas.modules.web.graphql import GraphQLModule
+    from bas.modules.web.websocket import WebSocketModule
+    from bas.modules.web.nosqli import NoSQLiModule
+    from bas.modules.web.ldap import LDAPiModule
+    from bas.modules.web.xpath import XPathiModule
+    from bas.modules.web.hpp import HPPModule
+
+    # Network modules
+    from bas.modules.network.port_scanner import PortScannerModule
+    from bas.modules.network.directory_brute import DirectoryBruteModule
+    from bas.modules.network.subdomain_enum import SubdomainEnumModule
+    from bas.modules.network.credential_tester import CredentialTesterModule
+
     module_map = {
+        # Original
         "discovery": DiscoveryModule,
         "sqli": SQLInjectionModule,
         "xss": XSSModule,
@@ -388,6 +444,30 @@ def _register_modules(engine, module_names, db, analyzer, model_manager, enable_
         "ssrf": SSRFModule,
         "jwt": JWTModule,
         "auth_bypass": AuthBypassModule,
+        # Web
+        "xxe": XXEModule,
+        "deserialization": DeserializationModule,
+        "open_redirect": OpenRedirectModule,
+        "cors": CORSModule,
+        "crlf": CRLFModule,
+        "path_traversal": PathTraversalModule,
+        "prototype_pollution": PrototypePollutionModule,
+        "file_upload": FileUploadModule,
+        "idor": IDORModule,
+        "csrf": CSRFModule,
+        "cache_deception": CacheDeceptionModule,
+        "request_smuggling": RequestSmugglingModule,
+        "graphql": GraphQLModule,
+        "websocket": WebSocketModule,
+        "nosqli": NoSQLiModule,
+        "ldap": LDAPiModule,
+        "xpath": XPathiModule,
+        "hpp": HPPModule,
+        # Network
+        "port_scan": PortScannerModule,
+        "dir_brute": DirectoryBruteModule,
+        "subdomain_enum": SubdomainEnumModule,
+        "credential_test": CredentialTesterModule,
     }
 
     for name in module_names:
@@ -397,6 +477,19 @@ def _register_modules(engine, module_names, db, analyzer, model_manager, enable_
     if enable_zeroday:
         from bas.modules.zeroday.simulator import ZeroDaySimulator
         engine.register_module("zeroday", ZeroDaySimulator(model_manager, payload_db=db, ai_analyzer=analyzer))
+
+    if enable_evasion:
+        try:
+            from bas.modules.evasion.edr_evasion import EDREvasionModule
+            from bas.modules.evasion.waf_bypass import WAFBypassModule
+            from bas.modules.evasion.amsi_bypass import AMSIBypassModule
+            from bas.modules.evasion.traffic_shaping import TrafficShapingModule
+            engine.register_module("edr_evasion", EDREvasionModule(payload_db=db, ai_analyzer=analyzer))
+            engine.register_module("waf_bypass", WAFBypassModule(payload_db=db, ai_analyzer=analyzer))
+            engine.register_module("amsi_bypass", AMSIBypassModule(payload_db=db, ai_analyzer=analyzer))
+            engine.register_module("traffic_shaping", TrafficShapingModule(payload_db=db, ai_analyzer=analyzer))
+        except ImportError:
+            pass
 
 
 # ─── Recon Command (Quick Recon) ────────────────────────────────────
@@ -413,7 +506,7 @@ def recon(
     asyncio.run(_run_scan(
         target=target,
         config_path=None,
-        modules_str="discovery",
+        modules_str="discovery,port_scan,dir_brute,subdomain_enum",
         auth_level="read_only",
         authorized_by=authorized_by,
         dry_run=False,
@@ -421,10 +514,31 @@ def recon(
         proxy=None,
         output_dir=output,
         enable_zeroday=False,
+        enable_evasion=False,
         ai_model="llama3.2",
         ai_host="http://localhost:11434",
         verbose=False,
     ))
+
+
+# ─── GUI Command ────────────────────────────────────────────────────
+
+@app.command("gui")
+def launch_gui(
+    host: str = typer.Option("127.0.0.1", "--host", help="GUI bind address"),
+    port: int = typer.Option(8443, "--port", "-p", help="GUI port"),
+):
+    """Launch the BASzy Ai web dashboard."""
+    show_banner()
+    console.print(f"[bold green]Starting BASzy Ai Dashboard[/bold green]")
+    console.print(f"[bold]URL:[/bold] http://{host}:{port}")
+    console.print(f"[dim]Press Ctrl+C to stop[/dim]\n")
+
+    import uvicorn
+    from bas.api.server import create_app
+
+    api_app = create_app()
+    uvicorn.run(api_app, host=host, port=port, log_level="info")
 
 
 # ─── Payloads Command ───────────────────────────────────────────────
@@ -503,7 +617,7 @@ async def _search_payloads(query: str, db_path: str, limit: int):
 
 @app.command("init")
 def config_init(
-    output: str = typer.Option("./bas_config.yaml", "--output", "-o"),
+    output: str = typer.Option("./baszy_config.yaml", "--output", "-o"),
 ):
     """Generate a default configuration file."""
     import shutil
@@ -515,7 +629,7 @@ def config_init(
             raise typer.Exit(0)
     shutil.copy(src, dst)
     console.print(f"[green]Config created:[/green] {dst}")
-    console.print("Edit this file with your engagement details, then run: bas scan <target> --config bas_config.yaml")
+    console.print("Edit this file with your engagement details, then run: baszy scan <target> --config baszy_config.yaml")
 
 
 # ─── Models Command ─────────────────────────────────────────────────
@@ -544,13 +658,45 @@ async def _list_models(host: str):
     console.print(table)
 
 
+# ─── Modules Command ────────────────────────────────────────────────
+
+@app.command("modules")
+def list_modules():
+    """List all available attack modules."""
+    show_banner()
+    table = Table(title=f"BASzy Ai Attack Modules ({len(ALL_MODULE_NAMES)})", box=box.ROUNDED)
+    table.add_column("#", style="dim", justify="right")
+    table.add_column("Module", style="cyan")
+    table.add_column("Category", style="green")
+
+    categories = {
+        "discovery": "Recon", "port_scan": "Network", "dir_brute": "Network",
+        "subdomain_enum": "Network", "credential_test": "Network",
+        "sqli": "Injection", "xss": "Injection", "command_injection": "Injection",
+        "ssti": "Injection", "nosqli": "Injection", "ldap": "Injection",
+        "xpath": "Injection", "ssrf": "SSRF", "jwt": "Auth",
+        "auth_bypass": "Auth", "xxe": "Web", "deserialization": "Web",
+        "open_redirect": "Web", "cors": "Web", "crlf": "Web",
+        "path_traversal": "Web", "prototype_pollution": "Web",
+        "file_upload": "Web", "idor": "Web", "csrf": "Web",
+        "cache_deception": "Web", "request_smuggling": "Web",
+        "graphql": "Web", "websocket": "Web", "hpp": "Web",
+        "edr_evasion": "Evasion", "waf_bypass": "Evasion",
+        "amsi_bypass": "Evasion", "traffic_shaping": "Evasion",
+    }
+
+    for i, name in enumerate(ALL_MODULE_NAMES, 1):
+        table.add_row(str(i), name, categories.get(name, "Other"))
+    console.print(table)
+
+
 # ─── Version ─────────────────────────────────────────────────────────
 
 @app.command("version")
 def version():
-    """Show BAS Engine version."""
+    """Show BASzy Ai version."""
     from bas import __version__
-    console.print(f"BAS Engine v{__version__}")
+    console.print(f"BASzy Ai v{__version__}")
 
 
 # ─── Entry Point ─────────────────────────────────────────────────────

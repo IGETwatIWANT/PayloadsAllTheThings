@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BASzy Ai - Breach & Attack Simulation</title>
+    <link rel="stylesheet" href="/static/css/app.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <nav id="sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-icon">&#9760;</div>
+            <span>BASzy Ai</span>
+            <small>v1.0.0</small>
+        </div>
+        <ul class="nav-items">
+            <li class="nav-item active" data-view="dashboard" onclick="switchView('dashboard')">
+                <span class="nav-icon">&#9673;</span> Dashboard
+            </li>
+            <li class="nav-item" data-view="scan" onclick="switchView('scan')">
+                <span class="nav-icon">&#9889;</span> New Scan
+            </li>
+            <li class="nav-item" data-view="findings" onclick="switchView('findings')">
+                <span class="nav-icon">&#9888;</span> Findings
+            </li>
+            <li class="nav-item" data-view="payloads" onclick="switchView('payloads')">
+                <span class="nav-icon">&#128163;</span> Payloads
+            </li>
+            <li class="nav-item" data-view="mitre" onclick="switchView('mitre')">
+                <span class="nav-icon">&#128737;</span> MITRE ATT&CK
+            </li>
+            <li class="nav-item" data-view="settings" onclick="switchView('settings')">
+                <span class="nav-icon">&#9881;</span> Settings
+            </li>
+        </ul>
+        <div class="sidebar-footer">
+            <div id="ai-status" class="status-badge offline">AI: Checking...</div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="content">
+        <!-- Dashboard View -->
+        <div id="view-dashboard" class="view active">
+            <header class="view-header">
+                <h1>Dashboard</h1>
+                <span id="engine-status" class="status-pill">Initializing...</span>
+            </header>
+
+            <div class="stats-grid">
+                <div class="stat-card critical">
+                    <div class="stat-value" id="stat-critical">0</div>
+                    <div class="stat-label">Critical</div>
+                </div>
+                <div class="stat-card high">
+                    <div class="stat-value" id="stat-high">0</div>
+                    <div class="stat-label">High</div>
+                </div>
+                <div class="stat-card medium">
+                    <div class="stat-value" id="stat-medium">0</div>
+                    <div class="stat-label">Medium</div>
+                </div>
+                <div class="stat-card low">
+                    <div class="stat-value" id="stat-low">0</div>
+                    <div class="stat-label">Low</div>
+                </div>
+                <div class="stat-card info-card">
+                    <div class="stat-value" id="stat-payloads">-</div>
+                    <div class="stat-label">Payloads Loaded</div>
+                </div>
+                <div class="stat-card info-card">
+                    <div class="stat-value" id="stat-scans">0</div>
+                    <div class="stat-label">Total Scans</div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h2>Active Scans</h2>
+                <div id="active-scans">
+                    <p class="empty-state">No active scans. Start one from the New Scan tab.</p>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h2>Recent Findings</h2>
+                <table id="recent-findings-table" class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th><th>Severity</th><th>Module</th><th>Title</th><th>Target</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recent-findings-body">
+                        <tr><td colspan="5" class="empty-state">No findings yet.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- New Scan View -->
+        <div id="view-scan" class="view">
+            <header class="view-header">
+                <h1>New Scan</h1>
+            </header>
+            <div class="panel scan-config">
+                <form id="scan-form" onsubmit="startScan(event)">
+                    <div class="form-group">
+                        <label for="scan-target">Target URL</label>
+                        <input type="url" id="scan-target" placeholder="https://target.internal:8443" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="scan-authorized">Authorized By</label>
+                        <input type="text" id="scan-authorized" placeholder="Your Name / Team" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="scan-auth-level">Authorization Level</label>
+                            <select id="scan-auth-level">
+                                <option value="read_only">Read Only (Passive)</option>
+                                <option value="low_impact" selected>Low Impact</option>
+                                <option value="standard">Standard</option>
+                                <option value="aggressive">Aggressive</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="scan-rps">Max Requests/sec</label>
+                            <input type="number" id="scan-rps" value="10" min="1" max="100">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Modules</label>
+                        <div class="module-grid" id="module-checkboxes"></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="scan-zeroday"> Enable Zero-Day Simulation (AI)
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="scan-dryrun"> Dry Run (no actual requests)
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="scan-proxy">Proxy (optional)</label>
+                        <input type="text" id="scan-proxy" placeholder="http://127.0.0.1:8080">
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-danger btn-lg">Launch Scan</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Live Scan Progress -->
+            <div id="scan-progress-panel" class="panel" style="display:none;">
+                <h2>Scan Progress</h2>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="scan-progress-bar" style="width:0%"></div>
+                </div>
+                <div id="scan-progress-text">Initializing...</div>
+                <div id="scan-live-modules" class="module-status-list"></div>
+                <button onclick="stopCurrentScan()" class="btn btn-secondary">Emergency Stop</button>
+            </div>
+        </div>
+
+        <!-- Findings View -->
+        <div id="view-findings" class="view">
+            <header class="view-header">
+                <h1>Findings</h1>
+                <select id="findings-scan-select" onchange="loadFindings(this.value)">
+                    <option value="">Select a scan...</option>
+                </select>
+            </header>
+            <div class="severity-bar" id="severity-bar"></div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th><th>Severity</th><th>Module</th><th>Title</th><th>Evidence</th><th>Payload</th>
+                    </tr>
+                </thead>
+                <tbody id="findings-body">
+                    <tr><td colspan="6" class="empty-state">Select a scan to view findings.</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Payloads View -->
+        <div id="view-payloads" class="view">
+            <header class="view-header">
+                <h1>Payload Arsenal</h1>
+            </header>
+            <div class="panel">
+                <div class="search-bar">
+                    <input type="text" id="payload-search" placeholder="Search payloads (e.g., UNION SELECT, alert, sleep)..." onkeydown="if(event.key==='Enter')searchPayloads()">
+                    <button onclick="searchPayloads()" class="btn btn-primary">Search</button>
+                </div>
+                <div id="payload-stats" class="payload-stats"></div>
+                <div id="payload-categories" class="category-grid"></div>
+                <table class="data-table" id="payload-results-table" style="display:none;">
+                    <thead>
+                        <tr><th>Category</th><th>Payload</th><th>Source</th></tr>
+                    </thead>
+                    <tbody id="payload-results-body"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- MITRE ATT&CK View -->
+        <div id="view-mitre" class="view">
+            <header class="view-header">
+                <h1>MITRE ATT&CK Coverage</h1>
+            </header>
+            <div id="mitre-matrix" class="mitre-matrix"></div>
+        </div>
+
+        <!-- Settings View -->
+        <div id="view-settings" class="view">
+            <header class="view-header">
+                <h1>Settings</h1>
+            </header>
+            <div class="panel">
+                <h2>AI Model</h2>
+                <div id="ai-models-list"></div>
+            </div>
+            <div class="panel">
+                <h2>Engine Info</h2>
+                <div id="engine-info"></div>
+            </div>
+        </div>
+    </main>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

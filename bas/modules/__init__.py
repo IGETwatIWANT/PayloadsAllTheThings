@@ -1,5 +1,5 @@
 """
-Attack modules for BAS Engine.
+Attack modules for BASzy Ai.
 
 Each module implements a specific attack category and can:
 - Load payloads from the database

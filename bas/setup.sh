@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 # ============================================================================
-# BAS Engine - One-Shot Installer
+# BASzy Ai - One-Shot Installer
 # ============================================================================
 # Downloads, unpacks, installs dependencies, and configures the AI backend.
 # Run: curl -sSL <url>/setup.sh | bash
 # Or:  ./setup.sh
+# Proprietary - All Rights Reserved.
 # ============================================================================
 
 set -euo pipefail
@@ -16,20 +17,20 @@ CYAN='\033[0;36m'
 NC='\033[0m'
 BOLD='\033[1m'
 
-BAS_VERSION="0.1.0"
+BASZY_VERSION="1.0.0"
 OLLAMA_MODEL="llama3.2"
 MIN_PYTHON="3.10"
 
 print_banner() {
     echo -e "${RED}"
-    echo " ██████╗  █████╗ ███████╗    ███████╗███╗   ██╗ ██████╗ ██╗███╗   ██╗███████╗"
-    echo " ██╔══██╗██╔══██╗██╔════╝    ██╔════╝████╗  ██║██╔════╝ ██║████╗  ██║██╔════╝"
-    echo " ██████╔╝███████║███████╗    █████╗  ██╔██╗ ██║██║  ███╗██║██╔██╗ ██║█████╗  "
-    echo " ██╔══██╗██╔══██║╚════██║    ██╔══╝  ██║╚██╗██║██║   ██║██║██║╚██╗██║██╔══╝  "
-    echo " ██████╔╝██║  ██║███████║    ███████╗██║ ╚████║╚██████╔╝██║██║ ╚████║███████╗"
-    echo " ╚═════╝ ╚═╝  ╚═╝╚══════╝    ╚══════╝╚═╝  ╚═══╝ ╚═════╝ ╚═╝╚═╝  ╚═══╝╚══════╝"
+    echo " ██████╗  █████╗ ███████╗███████╗██╗   ██╗     █████╗ ██╗"
+    echo " ██╔══██╗██╔══██╗██╔════╝╚══███╔╝╚██╗ ██╔╝    ██╔══██╗██║"
+    echo " ██████╔╝███████║███████╗  ███╔╝  ╚████╔╝     ███████║██║"
+    echo " ██╔══██╗██╔══██║╚════██║ ███╔╝    ╚██╔╝      ██╔══██║██║"
+    echo " ██████╔╝██║  ██║███████║███████╗   ██║       ██║  ██║██║"
+    echo " ╚═════╝ ╚═╝  ╚═╝╚══════╝╚══════╝   ╚═╝       ╚═╝  ╚═╝╚═╝"
     echo -e "${NC}"
-    echo -e "${BOLD}AI-Driven Breach & Attack Simulation Engine v${BAS_VERSION}${NC}"
+    echo -e "${BOLD}AI-Driven Breach & Attack Simulation Platform v${BASZY_VERSION}${NC}"
     echo -e "${CYAN}Installer${NC}"
     echo ""
 }
@@ -72,10 +73,10 @@ check_python() {
 
 create_venv() {
     log_step "Creating virtual environment..."
-    BAS_DIR="${BAS_HOME:-$HOME/.bas}"
-    VENV_DIR="$BAS_DIR/venv"
+    BASZY_DIR="${BASZY_HOME:-$HOME/.baszy}"
+    VENV_DIR="$BASZY_DIR/venv"
 
-    mkdir -p "$BAS_DIR"
+    mkdir -p "$BASZY_DIR"
 
     if [ ! -d "$VENV_DIR" ]; then
         python3 -m venv "$VENV_DIR"
@@ -88,16 +89,16 @@ create_venv() {
     pip install --upgrade pip setuptools wheel -q
 }
 
-install_bas() {
-    log_step "Installing BAS Engine..."
-    BAS_SRC="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+install_baszy() {
+    log_step "Installing BASzy Ai..."
+    BASZY_SRC="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-    # Install BAS and dependencies
-    pip install -e "$BAS_SRC[ai]" -q 2>/dev/null || {
+    # Install BASzy Ai and dependencies
+    pip install -e "$BASZY_SRC[ai]" -q 2>/dev/null || {
         log_warn "Full AI install failed, trying core only..."
-        pip install -e "$BAS_SRC" -q
+        pip install -e "$BASZY_SRC" -q
     }
-    log_info "BAS Engine installed"
+    log_info "BASzy Ai installed (35 attack modules loaded)"
 }
 
 setup_ollama() {
@@ -135,18 +136,18 @@ setup_ollama() {
 
 load_payloads() {
     log_step "Loading payload database..."
-    BAS_DATA="$BAS_DIR/data"
-    mkdir -p "$BAS_DATA"
+    BASZY_DATA="$BASZY_DIR/data"
+    mkdir -p "$BASZY_DATA"
 
-    BAS_SRC="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-    REPO_PATH="$(dirname "$BAS_SRC")"
+    BASZY_SRC="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    REPO_PATH="$(dirname "$BASZY_SRC")"
 
     python3 -c "
 import asyncio
 from bas.payloads.loader import PayloadLoader
 
 async def load():
-    loader = PayloadLoader('$REPO_PATH', '$BAS_DATA/payloads.db')
+    loader = PayloadLoader('$REPO_PATH', '$BASZY_DATA/payloads.db')
     db = await loader.load_all()
     stats = await db.get_stats()
     print(f'Loaded {stats[\"total_payloads\"]} payloads from {stats[\"categories\"]} categories')
@@ -158,7 +159,7 @@ asyncio.run(load())
 
 create_shell_alias() {
     log_step "Creating shell alias..."
-    BAS_BIN="$VENV_DIR/bin/bas"
+    BASZY_BIN="$VENV_DIR/bin/baszy"
 
     # Determine shell config file
     SHELL_RC=""
@@ -171,11 +172,11 @@ create_shell_alias() {
     fi
 
     if [ -n "$SHELL_RC" ]; then
-        if ! grep -q "alias bas=" "$SHELL_RC" 2>/dev/null; then
+        if ! grep -q "alias baszy=" "$SHELL_RC" 2>/dev/null; then
             echo "" >> "$SHELL_RC"
-            echo "# BAS Engine" >> "$SHELL_RC"
-            echo "alias bas='$BAS_BIN'" >> "$SHELL_RC"
-            log_info "Added 'bas' alias to $SHELL_RC"
+            echo "# BASzy Ai" >> "$SHELL_RC"
+            echo "alias baszy='$BASZY_BIN'" >> "$SHELL_RC"
+            log_info "Added 'baszy' alias to $SHELL_RC"
         else
             log_info "Alias already exists in $SHELL_RC"
         fi
@@ -185,26 +186,28 @@ create_shell_alias() {
 print_success() {
     echo ""
     echo -e "${GREEN}============================================================================${NC}"
-    echo -e "${GREEN}  BAS Engine installed successfully!${NC}"
+    echo -e "${GREEN}  BASzy Ai installed successfully! (35 attack modules)${NC}"
     echo -e "${GREEN}============================================================================${NC}"
     echo ""
     echo -e "  ${BOLD}Quick Start:${NC}"
-    echo -e "    ${CYAN}bas scan https://your-target.com --authorized-by 'Your Name' --dry-run${NC}"
+    echo -e "    ${CYAN}baszy scan https://your-target.com --authorized-by 'Your Name' --dry-run${NC}"
     echo ""
     echo -e "  ${BOLD}Commands:${NC}"
-    echo -e "    ${CYAN}bas scan <target>${NC}        - Full BAS assessment"
-    echo -e "    ${CYAN}bas recon <target>${NC}       - Quick reconnaissance"
-    echo -e "    ${CYAN}bas payloads load${NC}        - Reload payload database"
-    echo -e "    ${CYAN}bas payloads search <q>${NC}  - Search payloads"
-    echo -e "    ${CYAN}bas models${NC}               - List AI models"
-    echo -e "    ${CYAN}bas init${NC}                 - Generate config file"
+    echo -e "    ${CYAN}baszy scan <target>${NC}        - Full BAS assessment (35 modules)"
+    echo -e "    ${CYAN}baszy recon <target>${NC}       - Quick reconnaissance"
+    echo -e "    ${CYAN}baszy gui${NC}                  - Launch web dashboard"
+    echo -e "    ${CYAN}baszy modules${NC}              - List all attack modules"
+    echo -e "    ${CYAN}baszy payloads load${NC}        - Reload payload database"
+    echo -e "    ${CYAN}baszy payloads search <q>${NC}  - Search payloads"
+    echo -e "    ${CYAN}baszy models${NC}               - List AI models"
+    echo -e "    ${CYAN}baszy init${NC}                 - Generate config file"
     echo ""
     echo -e "  ${BOLD}Data Locations:${NC}"
-    echo -e "    Config:   ${BAS_DIR:-$HOME/.bas}"
+    echo -e "    Config:   ${BASZY_DIR:-$HOME/.baszy}"
     echo -e "    Logs:     ./bas_logs/"
     echo -e "    Reports:  ./bas_output/"
     echo ""
-    echo -e "  ${YELLOW}Remember: Only use against systems you are authorized to test.${NC}"
+    echo -e "  ${YELLOW}Authorized Red Team Operations Only.${NC}"
     echo ""
 }
 
@@ -215,7 +218,7 @@ main() {
     check_os
     check_python
     create_venv
-    install_bas
+    install_baszy
     setup_ollama
     load_payloads
     create_shell_alias
