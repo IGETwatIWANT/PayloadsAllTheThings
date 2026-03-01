@@ -91,6 +91,11 @@ ALL_MODULE_NAMES = [
     # Post-Exploitation (Phase 3)
     "data_exfil", "privilege_escalation", "session_attacks",
     "password_policy", "email_injection", "business_logic",
+    # OSINT (Phase 4)
+    "osint",
+    # Adversarial ML (Phase 4)
+    "prompt_injection", "model_extraction", "model_evasion",
+    "data_leakage", "ai_supply_chain", "ai_dos",
 ]
 
 
@@ -467,6 +472,17 @@ def _register_modules(engine, module_names, db, analyzer, model_manager, enable_
     from bas.modules.postexploit.email_injection import EmailInjectionModule
     from bas.modules.postexploit.business_logic import BusinessLogicModule
 
+    # OSINT module
+    from bas.modules.recon.osint import OSINTModule
+
+    # Adversarial ML modules
+    from bas.modules.adversarial_ml.prompt_injection import PromptInjectionModule
+    from bas.modules.adversarial_ml.model_extraction import ModelExtractionModule
+    from bas.modules.adversarial_ml.model_evasion import ModelEvasionModule
+    from bas.modules.adversarial_ml.data_leakage import DataLeakageModule
+    from bas.modules.adversarial_ml.ai_supply_chain import AISupplyChainModule
+    from bas.modules.adversarial_ml.ai_dos import AIDosModule
+
     module_map = {
         # Original
         "discovery": DiscoveryModule,
@@ -522,6 +538,15 @@ def _register_modules(engine, module_names, db, analyzer, model_manager, enable_
         "password_policy": PasswordPolicyModule,
         "email_injection": EmailInjectionModule,
         "business_logic": BusinessLogicModule,
+        # OSINT
+        "osint": OSINTModule,
+        # Adversarial ML
+        "prompt_injection": PromptInjectionModule,
+        "model_extraction": ModelExtractionModule,
+        "model_evasion": ModelEvasionModule,
+        "data_leakage": DataLeakageModule,
+        "ai_supply_chain": AISupplyChainModule,
+        "ai_dos": AIDosModule,
     }
 
     for name in module_names:
@@ -746,6 +771,10 @@ def list_modules():
         "data_exfil": "Post-Exploit", "privilege_escalation": "Post-Exploit",
         "session_attacks": "Post-Exploit", "password_policy": "Post-Exploit",
         "email_injection": "Post-Exploit", "business_logic": "Post-Exploit",
+        "osint": "Recon",
+        "prompt_injection": "Adversarial ML", "model_extraction": "Adversarial ML",
+        "model_evasion": "Adversarial ML", "data_leakage": "Adversarial ML",
+        "ai_supply_chain": "Adversarial ML", "ai_dos": "Adversarial ML",
     }
 
     for i, name in enumerate(ALL_MODULE_NAMES, 1):

@@ -64,6 +64,16 @@ MITRE_TECHNIQUES: dict[str, MITRETechnique] = {
     "T1584": MITRETechnique("T1584", "Compromise Infrastructure", "Resource Development", "Compromise third-party infrastructure.", "https://attack.mitre.org/techniques/T1584"),
     "T1566": MITRETechnique("T1566", "Phishing", "Initial Access", "Send phishing messages to gain access.", "https://attack.mitre.org/techniques/T1566"),
     "T1213": MITRETechnique("T1213", "Data from Information Repositories", "Collection", "Collect data from information repositories.", "https://attack.mitre.org/techniques/T1213"),
+    "T1589": MITRETechnique("T1589", "Gather Victim Identity Information", "Reconnaissance", "Gather identity information about victims.", "https://attack.mitre.org/techniques/T1589"),
+    "T1195": MITRETechnique("T1195", "Supply Chain Compromise", "Initial Access", "Manipulate products or delivery mechanisms.", "https://attack.mitre.org/techniques/T1195"),
+    "T1557": MITRETechnique("T1557", "Adversary-in-the-Middle", "Credential Access", "Position between two parties to intercept traffic.", "https://attack.mitre.org/techniques/T1557"),
+    "T1557.001": MITRETechnique("T1557.001", "LLMNR/NBT-NS Poisoning", "Credential Access", "Poison name resolution to capture credentials.", "https://attack.mitre.org/techniques/T1557/001"),
+    "T1111": MITRETechnique("T1111", "Multi-Factor Authentication Interception", "Credential Access", "Intercept MFA credentials.", "https://attack.mitre.org/techniques/T1111"),
+    "T1539": MITRETechnique("T1539", "Steal Web Session Cookie", "Credential Access", "Steal web session cookies for access.", "https://attack.mitre.org/techniques/T1539"),
+    "T1040": MITRETechnique("T1040", "Network Sniffing", "Credential Access", "Sniff network traffic for credentials.", "https://attack.mitre.org/techniques/T1040"),
+    "T1565": MITRETechnique("T1565", "Data Manipulation", "Impact", "Manipulate data to affect integrity.", "https://attack.mitre.org/techniques/T1565"),
+    "T1021": MITRETechnique("T1021", "Remote Services", "Lateral Movement", "Use remote services for lateral movement.", "https://attack.mitre.org/techniques/T1021"),
+    "T1599": MITRETechnique("T1599", "Network Boundary Bridging", "Defense Evasion", "Bridge network boundaries to bypass segmentation.", "https://attack.mitre.org/techniques/T1599"),
     # Command and Control
     "T1090": MITRETechnique("T1090", "Proxy", "Command and Control", "Adversaries may use proxies to direct network traffic.", "https://attack.mitre.org/techniques/T1090"),
     "T1071": MITRETechnique("T1071", "Application Layer Protocol", "Command and Control", "Communicate using application layer protocols.", "https://attack.mitre.org/techniques/T1071"),
@@ -135,6 +145,15 @@ MODULE_TECHNIQUE_MAP: dict[str, list[str]] = {
     "password_policy": ["T1110"],
     "email_injection": ["T1190"],
     "business_logic": ["T1190"],
+    # OSINT module
+    "osint": ["T1592", "T1595", "T1589"],
+    # Adversarial ML modules
+    "prompt_injection": ["T1059", "T1190"],
+    "model_extraction": ["T1005", "T1213"],
+    "model_evasion": ["T1027", "T1036"],
+    "data_leakage": ["T1213", "T1552"],
+    "ai_supply_chain": ["T1584", "T1195"],
+    "ai_dos": ["T1499"],
 }
 
 
