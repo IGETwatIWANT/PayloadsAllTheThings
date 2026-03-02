@@ -84,6 +84,33 @@ MITRE_TECHNIQUES: dict[str, MITRETechnique] = {
     "T1499": MITRETechnique("T1499", "Endpoint Denial of Service", "Impact", "Perform denial of service on endpoints.", "https://attack.mitre.org/techniques/T1499"),
     # Exfiltration
     "T1048": MITRETechnique("T1048", "Exfiltration Over Alternative Protocol", "Exfiltration", "Exfiltrate data over alternative protocols.", "https://attack.mitre.org/techniques/T1048"),
+    # Credential Access (Forensics)
+    "T1003": MITRETechnique("T1003", "OS Credential Dumping", "Credential Access", "Adversaries may dump credentials from the OS.", "https://attack.mitre.org/techniques/T1003"),
+    "T1003.001": MITRETechnique("T1003.001", "LSASS Memory", "Credential Access", "Access credential material stored in LSASS.", "https://attack.mitre.org/techniques/T1003/001"),
+    # Indicator Removal (Forensics)
+    "T1070": MITRETechnique("T1070", "Indicator Removal", "Defense Evasion", "Delete or modify artifacts generated on a host system.", "https://attack.mitre.org/techniques/T1070"),
+    "T1070.001": MITRETechnique("T1070.001", "Clear Windows Event Logs", "Defense Evasion", "Clear Windows Event Logs to hide activity.", "https://attack.mitre.org/techniques/T1070/001"),
+    "T1070.004": MITRETechnique("T1070.004", "File Deletion", "Defense Evasion", "Delete files to remove indicators.", "https://attack.mitre.org/techniques/T1070/004"),
+    "T1006": MITRETechnique("T1006", "Direct Volume Access", "Defense Evasion", "Directly access a volume to bypass file access controls.", "https://attack.mitre.org/techniques/T1006"),
+    # Mobile
+    "T1407": MITRETechnique("T1407", "Download New Code at Runtime", "Defense Evasion", "Download and execute code at runtime.", "https://attack.mitre.org/techniques/T1407"),
+    "T1418": MITRETechnique("T1418", "Software Discovery", "Discovery", "Enumerate software installed on a system.", "https://attack.mitre.org/techniques/T1418"),
+    "T1406": MITRETechnique("T1406", "Obfuscated Files or Information", "Defense Evasion", "Make artifacts difficult to analyze.", "https://attack.mitre.org/techniques/T1406"),
+    "T1417": MITRETechnique("T1417", "Input Capture", "Collection", "Capture user input to obtain credentials.", "https://attack.mitre.org/techniques/T1417"),
+    # Social Engineering
+    "T1566.001": MITRETechnique("T1566.001", "Spearphishing Attachment", "Initial Access", "Send spearphishing emails with malicious attachment.", "https://attack.mitre.org/techniques/T1566/001"),
+    "T1566.002": MITRETechnique("T1566.002", "Spearphishing Link", "Initial Access", "Send spearphishing emails with malicious link.", "https://attack.mitre.org/techniques/T1566/002"),
+    "T1566.004": MITRETechnique("T1566.004", "Spearphishing Voice", "Initial Access", "Use voice communications for social engineering.", "https://attack.mitre.org/techniques/T1566/004"),
+    # Persistence (Backdoor/Webshell already have T1505.003)
+    "T1053": MITRETechnique("T1053", "Scheduled Task/Job", "Persistence", "Abuse task scheduling for persistence.", "https://attack.mitre.org/techniques/T1053"),
+    "T1547": MITRETechnique("T1547", "Boot or Logon Autostart Execution", "Persistence", "Configure persistence via autostart mechanisms.", "https://attack.mitre.org/techniques/T1547"),
+    "T1574": MITRETechnique("T1574", "Hijack Execution Flow", "Persistence", "Hijack the way an OS runs programs.", "https://attack.mitre.org/techniques/T1574"),
+    # Cloud-specific
+    "T1580": MITRETechnique("T1580", "Cloud Infrastructure Discovery", "Discovery", "Discover cloud infrastructure components.", "https://attack.mitre.org/techniques/T1580"),
+    "T1619": MITRETechnique("T1619", "Cloud Storage Object Discovery", "Discovery", "Enumerate objects in cloud storage.", "https://attack.mitre.org/techniques/T1619"),
+    # Crypto
+    "T1573": MITRETechnique("T1573", "Encrypted Channel", "Command and Control", "Employ encryption to conceal C2 communications.", "https://attack.mitre.org/techniques/T1573"),
+    "T1600": MITRETechnique("T1600", "Weaken Encryption", "Defense Evasion", "Compromise encryption to gain access to traffic.", "https://attack.mitre.org/techniques/T1600"),
 }
 
 # Map module names to their primary MITRE techniques
@@ -167,6 +194,27 @@ MODULE_TECHNIQUE_MAP: dict[str, list[str]] = {
     "protocol_exploit": ["T1190", "T1599"],
     # Evasion modules (Phase 5)
     "ransomware_sim": ["T1486", "T1490", "T1027"],
+    # Cloud modules (Phase 6)
+    "aws_security": ["T1580", "T1619", "T1530", "T1552.005"],
+    "azure_security": ["T1580", "T1619", "T1530", "T1078"],
+    # Compliance modules (Phase 6)
+    "hipaa_audit": ["T1552", "T1005", "T1190"],
+    "pci_dss": ["T1552", "T1078.001", "T1190"],
+    # Crypto modules (Phase 6)
+    "crypto_weakness": ["T1573", "T1600", "T1552"],
+    "ssl_audit": ["T1573", "T1600", "T1040"],
+    # Persistence modules (Phase 6)
+    "backdoor_sim": ["T1053", "T1547", "T1574", "T1505.003"],
+    "webshell_detect": ["T1505.003", "T1190"],
+    # Forensics modules (Phase 6)
+    "memory_forensics": ["T1003", "T1003.001", "T1055"],
+    "disk_forensics": ["T1070", "T1070.001", "T1070.004", "T1006"],
+    # Mobile modules (Phase 6)
+    "android_security": ["T1407", "T1418", "T1552"],
+    "ios_security": ["T1406", "T1417", "T1552"],
+    # Social engineering modules (Phase 6)
+    "phishing_sim": ["T1566", "T1566.001", "T1566.002"],
+    "vishing_sim": ["T1566.004", "T1598"],
 }
 
 

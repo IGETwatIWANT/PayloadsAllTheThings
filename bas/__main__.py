@@ -102,6 +102,20 @@ ALL_MODULE_NAMES = [
     "wifi_security", "mitm_assessment", "protocol_exploit",
     # Evasion (Phase 5)
     "ransomware_sim",
+    # Cloud (Phase 6)
+    "aws_security", "azure_security",
+    # Compliance (Phase 6)
+    "hipaa_audit", "pci_dss",
+    # Crypto (Phase 6)
+    "crypto_weakness", "ssl_audit",
+    # Persistence (Phase 6)
+    "backdoor_sim", "webshell_detect",
+    # Forensics (Phase 6)
+    "memory_forensics", "disk_forensics",
+    # Mobile (Phase 6)
+    "android_security", "ios_security",
+    # Social Engineering (Phase 6)
+    "phishing_sim", "vishing_sim",
 ]
 
 
@@ -494,6 +508,34 @@ def _register_modules(engine, module_names, db, analyzer, model_manager, enable_
     # Evasion modules (Phase 5)
     from bas.modules.evasion.ransomware_sim import RansomwareSimModule
 
+    # Cloud modules (Phase 6)
+    from bas.modules.cloud.aws_security import AWSSecurityModule
+    from bas.modules.cloud.azure_security import AzureSecurityModule
+
+    # Compliance modules (Phase 6)
+    from bas.modules.compliance.hipaa_audit import HIPAAAuditModule
+    from bas.modules.compliance.pci_dss import PCIDSSModule
+
+    # Crypto modules (Phase 6)
+    from bas.modules.crypto.crypto_weakness import CryptoWeaknessModule
+    from bas.modules.crypto.ssl_audit import SSLAuditModule
+
+    # Persistence modules (Phase 6)
+    from bas.modules.persistence.backdoor_sim import BackdoorSimModule
+    from bas.modules.persistence.webshell_detect import WebShellDetectModule
+
+    # Forensics modules (Phase 6)
+    from bas.modules.forensics.memory_forensics import MemoryForensicsModule
+    from bas.modules.forensics.disk_forensics import DiskForensicsModule
+
+    # Mobile modules (Phase 6)
+    from bas.modules.mobile.android_security import AndroidSecurityModule
+    from bas.modules.mobile.ios_security import IOSSecurityModule
+
+    # Social engineering modules (Phase 6)
+    from bas.modules.social.phishing_sim import PhishingSimModule
+    from bas.modules.social.vishing_sim import VishingSimModule
+
     # Adversarial ML modules
     from bas.modules.adversarial_ml.prompt_injection import PromptInjectionModule
     from bas.modules.adversarial_ml.model_extraction import ModelExtractionModule
@@ -576,6 +618,27 @@ def _register_modules(engine, module_names, db, analyzer, model_manager, enable_
         "protocol_exploit": ProtocolExploitModule,
         # Evasion (Phase 5)
         "ransomware_sim": RansomwareSimModule,
+        # Cloud (Phase 6)
+        "aws_security": AWSSecurityModule,
+        "azure_security": AzureSecurityModule,
+        # Compliance (Phase 6)
+        "hipaa_audit": HIPAAAuditModule,
+        "pci_dss": PCIDSSModule,
+        # Crypto (Phase 6)
+        "crypto_weakness": CryptoWeaknessModule,
+        "ssl_audit": SSLAuditModule,
+        # Persistence (Phase 6)
+        "backdoor_sim": BackdoorSimModule,
+        "webshell_detect": WebShellDetectModule,
+        # Forensics (Phase 6)
+        "memory_forensics": MemoryForensicsModule,
+        "disk_forensics": DiskForensicsModule,
+        # Mobile (Phase 6)
+        "android_security": AndroidSecurityModule,
+        "ios_security": IOSSecurityModule,
+        # Social Engineering (Phase 6)
+        "phishing_sim": PhishingSimModule,
+        "vishing_sim": VishingSimModule,
     }
 
     for name in module_names:
@@ -808,6 +871,13 @@ def list_modules():
         "wifi_security": "Network", "mitm_assessment": "Network",
         "protocol_exploit": "Network",
         "ransomware_sim": "Evasion",
+        "aws_security": "Cloud", "azure_security": "Cloud",
+        "hipaa_audit": "Compliance", "pci_dss": "Compliance",
+        "crypto_weakness": "Crypto", "ssl_audit": "Crypto",
+        "backdoor_sim": "Persistence", "webshell_detect": "Persistence",
+        "memory_forensics": "Forensics", "disk_forensics": "Forensics",
+        "android_security": "Mobile", "ios_security": "Mobile",
+        "phishing_sim": "Social Engineering", "vishing_sim": "Social Engineering",
     }
 
     for i, name in enumerate(ALL_MODULE_NAMES, 1):
